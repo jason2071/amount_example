@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="incomeItem">
+        <item>เงินเดือน</item>
+        <item>ถูกหวย</item>
+        <item>รายได้เสริม</item>
+    </string-array>
+
+    <string-array name="expenseItem">
+        <item>ค่าข้าว</item>
+        <item>ค่าน้ำ</item>
+        <item>ค่าอินเตอร์เน็ต</item>
+        <item>ค่าห้อง</item>
+        <item>ค่าบัตรเครดิต</item>
+        <item>ช้อปปิ้ง</item>
+    </string-array>
+
+    <string-array name="monthItem">
+        <item>มกราคม</item>
+        <item>กุมภาพันธ์</item>
+        <item>มีนาคม</item>
+        <item>เมษายน</item>
+        <item>พฤษภาคม</item>
+        <item>มิถุนายน</item>
+        <item>กรกฎาคม</item>
+        <item>สิงหาคม</item>
+        <item>กันยายน</item>
+        <item>ตุลาคม</item>
+        <item>พฤศจิกายน</item>
+        <item>ธันวาคม</item>
+    </string-array>
+
+    <string-array name="yearItem">
+        <item>2019</item>
+        <item>2018</item>
+        <item>2017</item>
+    </string-array>
+</resources>

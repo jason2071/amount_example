@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Amount</string>
+    <string name="txt_new_item">รายการใหม่</string>
+    <string name="txt_amount_type">ชนิดรายการ</string>
+    <string name="txt_expense">รายจ่าย</string>
+    <string name="txt_income">รายรับ</string>
+    <string name="txt_select_date">วัน เดือน ปี</string>
+    <string name="txt_title_new_item">ชื่อรายการ</string>
+    <string name="txt_amount_money">จำนวนเงิน</string>
+    <string name="txt_save_data">บันทึกข้อมูล</string>
+</resources>
