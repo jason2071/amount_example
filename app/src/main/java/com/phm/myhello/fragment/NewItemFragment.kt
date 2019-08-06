@@ -2,8 +2,10 @@ package com.phm.myhello.fragment
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,11 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.phm.myhello.Common
+import com.phm.myhello.Parameter
 import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
 import com.phm.myhello.database.AmountContract.AmountEntry.*
 import com.phm.myhello.database.AmountDBHelper
+import com.phm.myhello.database.DBManager
+import com.phm.myhello.model.NewAmount
+import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_new_item.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,8 +31,8 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mActivity: NewItemActivity
     private var onItemSelectedListener: AdapterView.OnItemSelectedListener = this
-    private lateinit var mDatabase: SQLiteDatabase
-    private var mType = Common.TYPE_EXPENSE
+    private lateinit var dbManager: DBManager
+    private var mType = Parameter.TYPE_EXPENSE
     private var mAmount = 0
     private var mTitle = ""
     private var mDate = ""
@@ -43,9 +48,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val dbHelper = AmountDBHelper(mActivity)
-        mDatabase = dbHelper.writableDatabase
+        dbManager = DBManager(mActivity)
 
         buildSpinner()
         setCurrentDate()
@@ -76,26 +79,21 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun saveNewItemData() {
-        mType = if (radioIncome.isChecked) Common.TYPE_INCOME else Common.TYPE_EXPENSE
+        mType = if (radioIncome.isChecked) Parameter.TYPE_INCOME else Parameter.TYPE_EXPENSE
         mAmount = if (editAmount.text.toString().trim().isEmpty()) 0 else editAmount.text.toString().toInt()
+        mDate = tvDate.text!!.toString()
 
-        val dateArray = mDate.split("-")
-        val cv = ContentValues()
-        cv.put(COLUMN_DATE, dateArray[0])
-        cv.put(COLUMN_MONTH, dateArray[1])
-        cv.put(COLUMN_YEAR, dateArray[2])
-        cv.put(COLUMN_TYPE, mType)
-        cv.put(COLUMN_TITLE, mTitle)
-        cv.put(COLUMN_AMOUNT, mAmount)
-        mDatabase.insert(TABLE_NAME, null, cv)
+        // save
+        dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount))
 
+        val returnIntent = Intent()
+        mActivity.setResult(Activity.RESULT_OK, returnIntent)
         mActivity.onBackPressed()
     }
 
     private fun setCurrentDate() {
         val c = Calendar.getInstance()
-        mDate =  simpleDateFormat(c.time)!!
-        tvDate.setText(mDate)
+        tvDate.setText(simpleDateFormat(c.time)!!)
     }
 
     private fun buildSpinner() {
