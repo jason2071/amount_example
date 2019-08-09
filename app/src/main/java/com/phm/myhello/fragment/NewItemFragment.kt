@@ -17,6 +17,7 @@ import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
 import com.phm.myhello.database.DBManager
 import com.phm.myhello.model.NewAmount
+import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_new_item.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,6 +32,8 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var mAmount = 0
     private var mTitle = ""
     private var mDate = ""
+    private lateinit var incomeArray: Array<String>
+    private lateinit var expenseArray: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,9 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dbManager = DBManager(mActivity)
+
+        incomeArray = resources.getStringArray(R.array.incomeItem)
+        expenseArray = resources.getStringArray(R.array.expenseItem)
 
         buildSpinner()
         setCurrentDate()
@@ -63,6 +69,15 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+        if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
+
+            "true".log()
+
+        } else {
+            "false".log()
+        }
+
         mTitle = parent?.getItemAtPosition(position).toString()
     }
 
@@ -94,6 +109,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun buildSpinner() {
         val resource = if (radioIncome.isChecked) R.array.incomeItem else R.array.expenseItem
+
         val adapter = ArrayAdapter.createFromResource(
                 mActivity,
                 resource,

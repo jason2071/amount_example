@@ -35,6 +35,13 @@ class DBManager(mContext: Context) {
         return mDatabase.insert(TABLE_NAME, null, cv)
     }
 
+    fun update(amount: Amount): Int {
+        val cv = ContentValues()
+        cv.put(COLUMN_TITLE, amount.title)
+        cv.put(COLUMN_AMOUNT, amount.amount)
+        return mDatabase.update(TABLE_NAME, cv, "$_ID = ${amount.id}", null)
+    }
+
     fun getYear(): MutableList<String> {
         val list = mutableListOf<String>()
         mCursor = mDatabase.rawQuery("SELECT DISTINCT $COLUMN_YEAR FROM $TABLE_NAME", null)
