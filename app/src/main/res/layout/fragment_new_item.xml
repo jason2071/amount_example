@@ -92,7 +92,8 @@
         android:ellipsize="end"
         android:inputType="number"
         android:paddingStart="16dp"
-        android:paddingEnd="8dp" />
+        android:paddingEnd="8dp"
+        android:hint="0" />
 
     <Button
         android:id="@+id/btnSaveData"

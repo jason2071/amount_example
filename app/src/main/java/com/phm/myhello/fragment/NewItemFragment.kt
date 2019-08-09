@@ -3,10 +3,8 @@ package com.phm.myhello.fragment
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,11 +15,8 @@ import android.widget.ArrayAdapter
 import com.phm.myhello.Parameter
 import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
-import com.phm.myhello.database.AmountContract.AmountEntry.*
-import com.phm.myhello.database.AmountDBHelper
 import com.phm.myhello.database.DBManager
 import com.phm.myhello.model.NewAmount
-import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_new_item.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,8 +24,8 @@ import java.util.*
 
 class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var mActivity: NewItemActivity
     private var onItemSelectedListener: AdapterView.OnItemSelectedListener = this
+    private lateinit var mActivity: NewItemActivity
     private lateinit var dbManager: DBManager
     private var mType = Parameter.TYPE_EXPENSE
     private var mAmount = 0
@@ -84,11 +79,12 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mDate = tvDate.text!!.toString()
 
         // save
-        dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount))
+        val result = dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount)).toInt()
 
         val returnIntent = Intent()
+        returnIntent.putExtra("saveResult", result)
         mActivity.setResult(Activity.RESULT_OK, returnIntent)
-        mActivity.onBackPressed()
+        mActivity.finish()
     }
 
     private fun setCurrentDate() {

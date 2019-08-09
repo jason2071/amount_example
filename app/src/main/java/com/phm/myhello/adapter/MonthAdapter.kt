@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.phm.myhello.R
-import com.phm.myhello.utils.MonthAmount
+import com.phm.myhello.model.MonthAmount
 import kotlinx.android.synthetic.main.item_month_layout.view.*
 
-class MonthAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<MonthAdapter.MonthViewHolder>() {
+class MonthAdapter(private val listener: OnItemClickListener)
+    : RecyclerView.Adapter<MonthAdapter.MonthViewHolder>() {
 
     private var monthList = mutableListOf<MonthAmount>()
 
@@ -27,11 +28,8 @@ class MonthAdapter(private val listener: OnItemClickListener) : RecyclerView.Ada
     }
 
     fun updateData(newList: MutableList<MonthAmount>) {
-        monthList.clear()
         monthList = newList
-        if (newList.isNotEmpty()) {
-            notifyDataSetChanged()
-        }
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {
@@ -43,9 +41,9 @@ class MonthAdapter(private val listener: OnItemClickListener) : RecyclerView.Ada
         fun bindItem(items: MonthAmount) {
 
             itemView.tvMonthName.text = items.monthName
-            //itemView.tvAmountIncome.text = items.amountIncome.toString()
-            //itemView.tvAmountExpense.text = items.amountExpense.toString()
-            //itemView.tvAmountTotal.text = items.amountTotal.toString()
+            itemView.tvAmountIncome.text = items.amountIncome
+            itemView.tvAmountExpense.text = items.amountExpense
+            itemView.tvAmountTotal.text = items.amountTotal
 
             itemView.setOnClickListener {
                 listener.setItemClickListener(items)

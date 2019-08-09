@@ -1,5 +1,8 @@
 package com.phm.myhello.utils
 
+import com.phm.myhello.model.MonthAmount
+import com.phm.myhello.model.MonthModel
+
 object MonthData {
     val JAN = MonthModel(1, "มกราคม")
     val FEB = MonthModel(2, "กุมภาพันธ์")
@@ -67,6 +70,3 @@ object MonthData {
         }
     }
 }
-
-data class MonthModel(val id: Int, val name: String)
-data class MonthAmount(val id: Int, val monthName: String, var amountIncome: Long = 0, var amountExpense: Long = 0, var amountTotal: Long = 0)

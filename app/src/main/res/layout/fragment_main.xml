@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="20dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
     tools:context=".fragment.MainFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/monthRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp" />
 
 </FrameLayout>
