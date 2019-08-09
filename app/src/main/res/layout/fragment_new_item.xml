@@ -90,10 +90,23 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/shape_edit_text"
         android:ellipsize="end"
+        android:hint="0"
         android:inputType="number"
         android:paddingStart="16dp"
+        android:paddingEnd="8dp" />
+
+    <EditText
+        android:id="@+id/editOther"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape_edit_text"
+        android:ellipsize="end"
+        android:hint="Other Title"
+        android:inputType="text"
+        android:paddingStart="16dp"
         android:paddingEnd="8dp"
-        android:hint="0" />
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btnSaveData"

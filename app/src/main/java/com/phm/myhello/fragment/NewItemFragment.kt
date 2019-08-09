@@ -71,11 +71,9 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
 
         if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
-
-            "true".log()
-
+            editOther.visibility = View.VISIBLE
         } else {
-            "false".log()
+            editOther.visibility = View.GONE
         }
 
         mTitle = parent?.getItemAtPosition(position).toString()
