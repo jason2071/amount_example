@@ -72,8 +72,10 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
             editOther.visibility = View.VISIBLE
+            tvOtherTitle.visibility = View.VISIBLE
         } else {
             editOther.visibility = View.GONE
+            tvOtherTitle.visibility = View.GONE
         }
 
         mTitle = parent?.getItemAtPosition(position).toString()

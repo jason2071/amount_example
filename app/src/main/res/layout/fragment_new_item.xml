@@ -95,6 +95,14 @@
         android:paddingStart="16dp"
         android:paddingEnd="8dp" />
 
+    <TextView
+        android:id="@+id/tvOtherTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_other"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
     <EditText
         android:id="@+id/editOther"
         android:layout_width="match_parent"
@@ -102,7 +110,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/shape_edit_text"
         android:ellipsize="end"
-        android:hint="Other Title"
         android:inputType="text"
         android:paddingStart="16dp"
         android:paddingEnd="8dp"

@@ -10,4 +10,5 @@
     <string name="txt_save_data">บันทึกข้อมูล</string>
     <string name="txt_title">Title</string>
     <string name="txt_money">Money</string>
+    <string name="txt_other">อื่นๆ</string>
 </resources>
