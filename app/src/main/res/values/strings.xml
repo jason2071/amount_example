@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Amount</string>
+    <string name="app_name">Baht</string>
     <string name="txt_new_item">รายการใหม่</string>
     <string name="txt_amount_type">ชนิดรายการ</string>
     <string name="txt_expense">รายจ่าย</string>
