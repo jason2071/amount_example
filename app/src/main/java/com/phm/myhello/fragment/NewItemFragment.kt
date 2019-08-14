@@ -100,7 +100,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val insertResult = dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount)).toInt()
 
         val returnIntent = Intent()
-        returnIntent.putExtra("saveResult", insertResult)
+        returnIntent.putExtra(INSERT_RESULT, insertResult)
         mActivity.setResult(Activity.RESULT_OK, returnIntent)
         mActivity.finish()
     }
@@ -130,6 +130,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     companion object {
+        private const val INSERT_RESULT = "insertResult"
         @JvmStatic
         fun newInstance() = NewItemFragment().apply {
             arguments = Bundle().apply {}
