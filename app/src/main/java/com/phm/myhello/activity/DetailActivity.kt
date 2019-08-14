@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import com.phm.myhello.Parameter.RETURN_CODE
 import com.phm.myhello.R
 import com.phm.myhello.database.DBManager
 import com.phm.myhello.fragment.MonthFragment
@@ -37,9 +38,9 @@ class DetailActivity : BaseActivity() {
         supportFragmentManager.beginTransaction()
         val transaction = supportFragmentManager.beginTransaction()
         if (supportFragmentManager.findFragmentByTag(TAG) == null) {
-            transaction.add(R.id.monthContent, MonthFragment.newInstance(monthAmount.id), TAG)
+            transaction.add(R.id.monthContent, MonthFragment.newInstance(monthAmount), TAG)
         } else {
-            transaction.replace(R.id.monthContent, MonthFragment.newInstance(monthAmount.id), TAG)
+            transaction.replace(R.id.monthContent, MonthFragment.newInstance(monthAmount), TAG)
         }
         transaction.commitAllowingStateLoss()
     }
@@ -63,12 +64,18 @@ class DetailActivity : BaseActivity() {
         private const val TAG = "DetailActivity"
         private const val MONTH_AMOUNT = "monthAmount"
 
-        fun startActivity(activity: Activity, monthAmount: MonthAmount) {
+        fun startActivityForResult(activity: Activity, monthAmount: MonthAmount, code: Int) {
             val bundle = Bundle()
             bundle.putParcelable(MONTH_AMOUNT, monthAmount)
             val intent = Intent(activity, DetailActivity::class.java)
             intent.putExtras(bundle)
-            activity.startActivity(intent)
+            activity.startActivityForResult(intent, code)
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val returnIntent = Intent()
+        setResult(Activity.RESULT_CANCELED, returnIntent)
     }
 }

@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.phm.myhello.Parameter
+import com.phm.myhello.Parameter.TYPE_EXPENSE
+import com.phm.myhello.Parameter.TYPE_INCOME
 import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
 import com.phm.myhello.database.DBManager
@@ -28,7 +30,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private var onItemSelectedListener: AdapterView.OnItemSelectedListener = this
     private lateinit var mActivity: NewItemActivity
     private lateinit var dbManager: DBManager
-    private var mType = Parameter.TYPE_EXPENSE
+    private var mType = TYPE_EXPENSE
     private var mAmount = 0
     private var mTitle = ""
     private var mDate = ""
@@ -73,12 +75,12 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
             editOther.visibility = View.VISIBLE
             tvOtherTitle.visibility = View.VISIBLE
+            mTitle = editOther.text.toString()
         } else {
             editOther.visibility = View.GONE
             tvOtherTitle.visibility = View.GONE
+            mTitle = parent?.getItemAtPosition(position).toString()
         }
-
-        mTitle = parent?.getItemAtPosition(position).toString()
     }
 
     override fun onAttach(context: Context?) {
@@ -89,7 +91,7 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun saveNewItemData() {
-        mType = if (radioIncome.isChecked) Parameter.TYPE_INCOME else Parameter.TYPE_EXPENSE
+        mType = if (radioIncome.isChecked) TYPE_INCOME else TYPE_EXPENSE
         mAmount = if (editAmount.text.toString().trim().isEmpty()) 0 else editAmount.text.toString().toInt()
         mDate = tvDate.text!!.toString()
 

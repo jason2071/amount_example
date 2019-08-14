@@ -11,4 +11,5 @@
     <string name="txt_title">Title</string>
     <string name="txt_money">Money</string>
     <string name="txt_other">อื่นๆ</string>
+    <string name="txt_empty_data">ไม่มีข้อมูล</string>
 </resources>

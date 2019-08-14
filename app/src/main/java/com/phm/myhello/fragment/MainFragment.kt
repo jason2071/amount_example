@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.phm.myhello.Parameter.RETURN_CODE
 import com.phm.myhello.Parameter.TYPE_INCOME
 import com.phm.myhello.Parameter.monthList
 import com.phm.myhello.R
@@ -105,7 +106,7 @@ class MainFragment : Fragment(), MonthAdapter.OnItemClickListener {
     }
 
     override fun setItemClickListener(monthAmount: MonthAmount) {
-        DetailActivity.startActivity(mActivity, monthAmount)
+        DetailActivity.startActivityForResult(mActivity, monthAmount, RETURN_CODE)
     }
 
     companion object {

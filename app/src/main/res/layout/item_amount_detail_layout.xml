@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         app:cardCornerRadius="4dp"
         app:cardElevation="10dp">
 
@@ -27,11 +27,22 @@
                 android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/tvDetailDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvDetailTitle"
+                android:layout_marginStart="16dp"
+                android:text="99/99/9999"
+                android:textColor="@color/color_cecece"
+                android:textSize="14sp" />
+
+            <TextView
                 android:id="@+id/tvDetailMoney"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:text="+10000" />
 
         </RelativeLayout>

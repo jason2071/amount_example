@@ -13,8 +13,15 @@ import com.phm.myhello.R
 import com.phm.myhello.model.Amount
 import kotlinx.android.synthetic.main.item_amount_detail_layout.view.*
 
-class AmountDetailAdapter(private val mContext: Context, private val list: MutableList<Amount>, private val listener: OnItemClickDetailListener)
+class AmountDetailAdapter(private val mContext: Context, private var list: MutableList<Amount>, private val listener: OnItemClickDetailListener)
     : RecyclerView.Adapter<AmountDetailAdapter.AmountDetailViewHolder>() {
+
+    fun updateData(newList: MutableList<Amount>) {
+        this.list = newList
+        if (newList.isNotEmpty()) {
+            notifyDataSetChanged()
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AmountDetailViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_amount_detail_layout, parent, false)
@@ -26,31 +33,33 @@ class AmountDetailAdapter(private val mContext: Context, private val list: Mutab
     }
 
     override fun onBindViewHolder(holder: AmountDetailViewHolder, position: Int) {
-        holder.bindDetail(list[position])
+        holder.bindDetail(list, position)
     }
 
     interface OnItemClickDetailListener {
-        fun setOnItemClickDetailListener(amount: Amount)
+        fun setOnItemClickDetailListener(amount: Amount, position: Int)
     }
 
     inner class AmountDetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
-        fun bindDetail(amount: Amount) {
-            itemView.tvDetailTitle.text = amount.title
+        fun bindDetail(list: MutableList<Amount>, position: Int) {
+            val items = list[position]
+            itemView.tvDetailTitle.text = items.title
+            itemView.tvDetailDate.text = "${items.date}/${items.month}/${items.year}"
 
-            when (amount.type) {
+            when (items.type) {
                 TYPE_INCOME -> {
-                    itemView.tvDetailMoney.text = "+${amount.amount}"
+                    itemView.tvDetailMoney.text = "+${items.amount}"
                     itemView.tvDetailMoney.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_green_dark))
                 }
                 TYPE_EXPENSE -> {
-                    itemView.tvDetailMoney.text = "-${amount.amount}"
+                    itemView.tvDetailMoney.text = "-${items.amount}"
                     itemView.tvDetailMoney.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_red_dark))
                 }
             }
 
             itemView.setOnClickListener {
-                listener.setOnItemClickDetailListener(amount)
+                listener.setOnItemClickDetailListener(items, position)
             }
         }
     }

@@ -59,7 +59,7 @@ class DBManager(mContext: Context) {
 
     fun getAllDataByYear(mYear: String): MutableList<Amount> {
         val list = mutableListOf<Amount>()
-        mCursor = mDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_YEAR = $mYear", null)
+        mCursor = mDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_YEAR = $mYear ORDER BY $COLUMN_DATE", null)
 
         for (i in 0 until mCursor.count) {
             if (!mCursor.moveToPosition(i)) {

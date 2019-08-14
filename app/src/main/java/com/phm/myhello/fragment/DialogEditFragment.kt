@@ -13,12 +13,15 @@ import com.phm.myhello.database.DBManager
 import com.phm.myhello.manager.Contextor
 import com.phm.myhello.model.Amount
 import kotlinx.android.synthetic.main.fragment_dialog_edit.view.*
+import java.text.FieldPosition
 
 class DialogEditFragment : AppCompatDialogFragment() {
 
     private var mContext = Contextor.getInstance().context
     private lateinit var dbManager: DBManager
     private lateinit var detailData: Amount
+    private var position: Int = -1
+    private lateinit var dialogListener: OnUpdateResponse
 
     override fun onStart() {
         super.onStart()
@@ -48,7 +51,12 @@ class DialogEditFragment : AppCompatDialogFragment() {
 
             detailData.title = view.editTitle.text.toString()
             detailData.amount = view.editMoney.text.toString().toInt()
-            dbManager.update(detailData)
+
+            if (dbManager.update(detailData) == -1) {
+                dialogListener.setOnUpdateListener(detailData, position)
+            } else {
+                dialogListener.setOnUpdateListener(detailData, position)
+            }
             dismiss()
         }
 
@@ -56,7 +64,16 @@ class DialogEditFragment : AppCompatDialogFragment() {
         return builder.create()
     }
 
-    fun setEditData(amount: Amount) {
+    fun setEditData(amount: Amount, position: Int) {
         this.detailData = amount
+        this.position = position
+    }
+
+    fun setDialogListener(dialogListener: OnUpdateResponse) {
+        this.dialogListener = dialogListener
+    }
+
+    interface OnUpdateResponse {
+        fun setOnUpdateListener(detailData: Amount, position: Int)
     }
 }

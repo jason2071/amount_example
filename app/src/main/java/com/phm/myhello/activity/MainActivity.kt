@@ -27,6 +27,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     private var onItemSelectedListener: AdapterView.OnItemSelectedListener = this
     private lateinit var dbManager: DBManager
     private var mYear = ""
+    private var positionSpinner = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +70,8 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     override fun onNothingSelected(parent: AdapterView<*>?) {}
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         mYear = parent?.getItemAtPosition(position).toString()
+        positionSpinner = position
+
         val fm = supportFragmentManager.findFragmentByTag(TAG)
         if (fm is MainFragment) {
             fm.changeYear(mYear)
@@ -81,6 +84,7 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerYear.adapter = adapter
         spinnerYear.onItemSelectedListener = onItemSelectedListener
+        spinnerYear.setSelection(positionSpinner)
     }
 
     @SuppressLint("CommitTransaction")
@@ -95,11 +99,16 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     } else {
                         Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
 
-                        buildSpinnerYear()
                         val fm = supportFragmentManager.findFragmentByTag(TAG)
                         if (fm is MainFragment) {
                             fm.changeYear(mYear)
                         }
+                    }
+                }
+                Activity.RESULT_CANCELED -> {
+                    val fm = supportFragmentManager.findFragmentByTag(TAG)
+                    if (fm is MainFragment) {
+                        fm.changeYear(mYear)
                     }
                 }
             }
@@ -111,10 +120,8 @@ class MainActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
             super.onBackPressed()
             return
         }
-
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-
         Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
     }
 }
