@@ -4,14 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.google.gson.Gson
 import com.phm.myhello.Parameter.newAmountList
 import com.phm.myhello.database.AmountContract.AmountEntry.*
 import com.phm.myhello.model.Amount
 import com.phm.myhello.model.MonthAmount
 import com.phm.myhello.model.NewAmount
 import com.phm.myhello.utils.MonthData
-import com.phm.myhello.utils.log
 
 class DBManager(mContext: Context) {
 
@@ -23,6 +21,30 @@ class DBManager(mContext: Context) {
         mDatabase = dbHelper.writableDatabase
     }
 
+    fun insertKeyword(keyword: String) {
+        if (keyword.trim().isNotEmpty()) {
+            val cv = ContentValues()
+            cv.put(COLUMN_KEYWORD, keyword)
+            mDatabase.insert(TABLE_KEYWORD_NAME, null, cv)
+        }
+    }
+
+    fun getKeyword(): MutableList<String> {
+        val list = mutableListOf<String>()
+        mCursor = mDatabase.rawQuery("SELECT $COLUMN_KEYWORD FROM $TABLE_KEYWORD_NAME ORDER BY $COLUMN_KEYWORD", null)
+
+        for (i in 0 until mCursor.count) {
+            if (!mCursor.moveToPosition(i)) {
+                return mutableListOf()
+            } else {
+                val keyword = mCursor.getString(mCursor.getColumnIndex(COLUMN_KEYWORD))
+                list.add(keyword)
+            }
+        }
+        mCursor.close()
+        return list
+    }
+
     fun insert(newAmount: NewAmount): Long {
         val cv = ContentValues()
         val dateArray = newAmount.date.split("-")
@@ -32,19 +54,19 @@ class DBManager(mContext: Context) {
         cv.put(COLUMN_TYPE, newAmount.type)
         cv.put(COLUMN_TITLE, newAmount.title)
         cv.put(COLUMN_AMOUNT, newAmount.amount)
-        return mDatabase.insert(TABLE_NAME, null, cv)
+        return mDatabase.insert(TABLE_AMOUNT_NAME, null, cv)
     }
 
     fun update(amount: Amount): Int {
         val cv = ContentValues()
         cv.put(COLUMN_TITLE, amount.title)
         cv.put(COLUMN_AMOUNT, amount.amount)
-        return mDatabase.update(TABLE_NAME, cv, "$_ID = ${amount.id}", null)
+        return mDatabase.update(TABLE_AMOUNT_NAME, cv, "$_ID = ${amount.id}", null)
     }
 
     fun getYear(): MutableList<String> {
         val list = mutableListOf<String>()
-        mCursor = mDatabase.rawQuery("SELECT DISTINCT $COLUMN_YEAR FROM $TABLE_NAME", null)
+        mCursor = mDatabase.rawQuery("SELECT DISTINCT $COLUMN_YEAR FROM $TABLE_AMOUNT_NAME", null)
         for (i in 0 until mCursor.count) {
             if (!mCursor.moveToPosition(i)) {
                 return mutableListOf()
@@ -59,7 +81,7 @@ class DBManager(mContext: Context) {
 
     fun getAllDataByYear(mYear: String): MutableList<Amount> {
         val list = mutableListOf<Amount>()
-        mCursor = mDatabase.rawQuery("SELECT * FROM $TABLE_NAME WHERE $COLUMN_YEAR = $mYear ORDER BY $COLUMN_DATE", null)
+        mCursor = mDatabase.rawQuery("SELECT * FROM $TABLE_AMOUNT_NAME WHERE $COLUMN_YEAR = $mYear ORDER BY $COLUMN_DATE", null)
 
         for (i in 0 until mCursor.count) {
             if (!mCursor.moveToPosition(i)) {

@@ -65,18 +65,16 @@
         android:text="@string/txt_title_new_item"
         android:textSize="16sp" />
 
-    <FrameLayout
+    <AutoCompleteTextView
+        android:id="@+id/editNewTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/shape_edit_text"
-        android:padding="8dp">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </FrameLayout>
+        android:ellipsize="end"
+        android:inputType="text"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -102,18 +100,6 @@
         android:layout_height="wrap_content"
         android:text="@string/txt_other"
         android:textSize="16sp"
-        android:visibility="gone" />
-
-    <EditText
-        android:id="@+id/editOther"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/shape_edit_text"
-        android:ellipsize="end"
-        android:inputType="text"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
         android:visibility="gone" />
 
     <Button

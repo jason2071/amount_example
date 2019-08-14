@@ -10,22 +10,22 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.google.gson.Gson
 import com.phm.myhello.Parameter.TYPE_EXPENSE
 import com.phm.myhello.Parameter.TYPE_INCOME
 import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
 import com.phm.myhello.database.DBManager
 import com.phm.myhello.model.NewAmount
+import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_new_item.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class NewItemFragment : Fragment() {
 
-    private var onItemSelectedListener: AdapterView.OnItemSelectedListener = this
     private lateinit var mActivity: NewItemActivity
     private lateinit var dbManager: DBManager
     private var mType = TYPE_EXPENSE
@@ -51,33 +51,16 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         incomeArray = resources.getStringArray(R.array.incomeItem)
         expenseArray = resources.getStringArray(R.array.expenseItem)
 
-        buildSpinner()
+        buildAutoText()
         setCurrentDate()
-
-        radioIncome.setOnClickListener {
-            radioIncome.isChecked = true
-            buildSpinner()
-        }
-
-        radioExpense.setOnClickListener {
-            radioExpense.isChecked = true
-            buildSpinner()
-        }
 
         btnSaveData.setOnClickListener { saveNewItemData() }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {}
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
-            editOther.visibility = View.VISIBLE
-            tvOtherTitle.visibility = View.VISIBLE
-        } else {
-            editOther.visibility = View.GONE
-            tvOtherTitle.visibility = View.GONE
-        }
-        editOther.setText("")
-        mTitle = parent?.getItemAtPosition(position).toString()
+    private fun buildAutoText() {
+        val keywords = dbManager.getKeyword()
+        val adapter = ArrayAdapter(mActivity, android.R.layout.simple_dropdown_item_1line, keywords)
+        editNewTitle.setAdapter(adapter)
     }
 
     override fun onAttach(context: Context?) {
@@ -91,14 +74,18 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mType = if (radioIncome.isChecked) TYPE_INCOME else TYPE_EXPENSE
         mAmount = if (editAmount.text.toString().trim().isEmpty()) 0 else editAmount.text.toString().toInt()
         mDate = tvDate.text!!.toString()
+        mTitle = editNewTitle.text.toString()
 
-        if (editOther.text.toString().trim().isNotEmpty()) {
-            mTitle = editOther.text.toString()
-        }
-
-        // save
+        // save amount
         val insertResult = dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount)).toInt()
 
+        // save keyword
+        val keywords = dbManager.getKeyword()
+        if (!keywords.contains(mTitle)) {
+            dbManager.insertKeyword(mTitle)
+        }
+
+        // return to main
         val returnIntent = Intent()
         returnIntent.putExtra(INSERT_RESULT, insertResult)
         mActivity.setResult(Activity.RESULT_OK, returnIntent)
@@ -108,19 +95,6 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun setCurrentDate() {
         val c = Calendar.getInstance()
         tvDate.setText(simpleDateFormat(c.time)!!)
-    }
-
-    private fun buildSpinner() {
-        val resource = if (radioIncome.isChecked) R.array.incomeItem else R.array.expenseItem
-
-        val adapter = ArrayAdapter.createFromResource(
-                mActivity,
-                resource,
-                android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-        spinner.onItemSelectedListener = onItemSelectedListener
     }
 
     @SuppressLint("SimpleDateFormat")
