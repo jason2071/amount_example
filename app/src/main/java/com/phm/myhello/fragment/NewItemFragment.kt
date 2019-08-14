@@ -12,14 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import com.phm.myhello.Parameter
 import com.phm.myhello.Parameter.TYPE_EXPENSE
 import com.phm.myhello.Parameter.TYPE_INCOME
 import com.phm.myhello.R
 import com.phm.myhello.activity.NewItemActivity
 import com.phm.myhello.database.DBManager
 import com.phm.myhello.model.NewAmount
-import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_new_item.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,16 +69,15 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-
         if (position == incomeArray.size - 1 || position == expenseArray.size - 1) {
             editOther.visibility = View.VISIBLE
             tvOtherTitle.visibility = View.VISIBLE
-            mTitle = editOther.text.toString()
         } else {
             editOther.visibility = View.GONE
             tvOtherTitle.visibility = View.GONE
-            mTitle = parent?.getItemAtPosition(position).toString()
         }
+        editOther.setText("")
+        mTitle = parent?.getItemAtPosition(position).toString()
     }
 
     override fun onAttach(context: Context?) {
@@ -95,11 +92,15 @@ class NewItemFragment : Fragment(), AdapterView.OnItemSelectedListener {
         mAmount = if (editAmount.text.toString().trim().isEmpty()) 0 else editAmount.text.toString().toInt()
         mDate = tvDate.text!!.toString()
 
+        if (editOther.text.toString().trim().isNotEmpty()) {
+            mTitle = editOther.text.toString()
+        }
+
         // save
-        val result = dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount)).toInt()
+        val insertResult = dbManager.insert(NewAmount(mDate, mType, mTitle, mAmount)).toInt()
 
         val returnIntent = Intent()
-        returnIntent.putExtra("saveResult", result)
+        returnIntent.putExtra("saveResult", insertResult)
         mActivity.setResult(Activity.RESULT_OK, returnIntent)
         mActivity.finish()
     }
