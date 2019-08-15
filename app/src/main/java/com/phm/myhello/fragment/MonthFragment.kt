@@ -5,17 +5,22 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
 import com.phm.myhello.Parameter.TYPE_INCOME
 import com.phm.myhello.Parameter.monthList
 import com.phm.myhello.Parameter.newAmountList
 import com.phm.myhello.R
 import com.phm.myhello.activity.DetailActivity
 import com.phm.myhello.adapter.AmountDetailAdapter
+import com.phm.myhello.database.DBManager
 import com.phm.myhello.model.Amount
 import com.phm.myhello.model.MonthAmount
+import com.phm.myhello.utils.log
 import kotlinx.android.synthetic.main.fragment_month.*
 
 class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener, DialogEditFragment.OnUpdateResponse {
@@ -25,6 +30,7 @@ class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener,
     private lateinit var mActivity: DetailActivity
     private lateinit var amountDetailAdapter: AmountDetailAdapter
     private lateinit var monthAmount: MonthAmount
+    private lateinit var dbManager: DBManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,8 @@ class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dbManager = DBManager(mActivity)
 
         tvAmountIncome.text = monthAmount.amountIncome
         tvAmountExpense.text = monthAmount.amountExpense
@@ -61,6 +69,23 @@ class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener,
         detailRecyclerView.layoutManager = LinearLayoutManager(mActivity)
         amountDetailAdapter = AmountDetailAdapter(mActivity, data, listener)
         detailRecyclerView.adapter = amountDetailAdapter
+
+        ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                removeItem(viewHolder.itemView.tag as Int)
+            }
+        }).attachToRecyclerView(detailRecyclerView)
+    }
+
+    private fun removeItem(id: Int) {
+        dbManager.delete(id)
+        dbManager.getDataByMonthAmount(monthAmount.year!!)
+        setNewMonthList(monthAmount.id, newAmountList[monthAmount.id - 1])
+        amountDetailAdapter.updateData(newAmountList[monthAmount.id - 1])
     }
 
     override fun setOnItemClickDetailListener(amount: Amount, position: Int) {
@@ -74,10 +99,6 @@ class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener,
         newAmountList[monthAmount.id - 1][position] = detailData
         amountDetailAdapter.updateData(newAmountList[monthAmount.id - 1])
         setNewMonthList(detailData.month, newAmountList[monthAmount.id - 1])
-
-        tvAmountIncome.text = monthAmount.amountIncome
-        tvAmountExpense.text = monthAmount.amountExpense
-        tvAmountTotal.text = monthAmount.amountTotal
     }
 
     private fun setNewMonthList(monthID: Int, amountList: MutableList<Amount>) {
@@ -94,10 +115,14 @@ class MonthFragment : Fragment(), AmountDetailAdapter.OnItemClickDetailListener,
                 }
             }
         }
-        monthList[monthID - 1].amountIncome = "+$income"
-        monthList[monthID - 1].amountExpense = "-$expense"
+        monthList[monthID - 1].amountIncome = "$income"
+        monthList[monthID - 1].amountExpense = "$expense"
         monthList[monthID - 1].amountTotal = "${(income - expense)}"
         monthAmount = monthList[monthID - 1]
+
+        tvAmountIncome.text = monthAmount.amountIncome
+        tvAmountExpense.text = monthAmount.amountExpense
+        tvAmountTotal.text = monthAmount.amountTotal
     }
 
     companion object {

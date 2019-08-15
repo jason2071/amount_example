@@ -64,6 +64,10 @@ class DBManager(mContext: Context) {
         return mDatabase.update(TABLE_AMOUNT_NAME, cv, "$_ID = ${amount.id}", null)
     }
 
+    fun delete(id: Int) {
+        mDatabase.delete(TABLE_AMOUNT_NAME, "$_ID = $id", null)
+    }
+
     fun getYear(): MutableList<String> {
         val list = mutableListOf<String>()
         mCursor = mDatabase.rawQuery("SELECT DISTINCT $COLUMN_YEAR FROM $TABLE_AMOUNT_NAME", null)
@@ -101,7 +105,7 @@ class DBManager(mContext: Context) {
         return list
     }
 
-    fun getDataByMonthAmount(monthAmount: MonthAmount) {
+    fun getDataByMonthAmount(year : String) {
         val janList = mutableListOf<Amount>()
         val febList = mutableListOf<Amount>()
         val marList = mutableListOf<Amount>()
@@ -115,7 +119,7 @@ class DBManager(mContext: Context) {
         val novList = mutableListOf<Amount>()
         val decList = mutableListOf<Amount>()
 
-        val data = getAllDataByYear(monthAmount.year!!)
+        val data = getAllDataByYear(year)
 
         for (i in 0 until data.size) {
             when (data[i].month) {

@@ -44,16 +44,17 @@ class AmountDetailAdapter(private val mContext: Context, private var list: Mutab
         @SuppressLint("SetTextI18n")
         fun bindDetail(list: MutableList<Amount>, position: Int) {
             val items = list[position]
+            itemView.tag = items.id
             itemView.tvDetailTitle.text = items.title
             itemView.tvDetailDate.text = "${items.date}/${items.month}/${items.year}"
 
             when (items.type) {
                 TYPE_INCOME -> {
-                    itemView.tvDetailMoney.text = "+${items.amount}"
+                    itemView.tvDetailMoney.text = "฿${items.amount}"
                     itemView.tvDetailMoney.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_green_dark))
                 }
                 TYPE_EXPENSE -> {
-                    itemView.tvDetailMoney.text = "-${items.amount}"
+                    itemView.tvDetailMoney.text = "฿${items.amount}"
                     itemView.tvDetailMoney.setTextColor(ContextCompat.getColor(mContext, android.R.color.holo_red_dark))
                 }
             }

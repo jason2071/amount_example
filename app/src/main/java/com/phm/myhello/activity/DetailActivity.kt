@@ -33,7 +33,7 @@ class DetailActivity : BaseActivity() {
         supportActionBar?.title = "${monthAmount.monthName} ${monthAmount.year}"
 
         dbManager = DBManager(this)
-        dbManager.getDataByMonthAmount(monthAmount)
+        dbManager.getDataByMonthAmount(monthAmount.year!!)
 
         supportFragmentManager.beginTransaction()
         val transaction = supportFragmentManager.beginTransaction()

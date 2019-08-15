@@ -99,8 +99,8 @@ class MainFragment : Fragment(), MonthAdapter.OnItemClickListener {
                 }
             }
         }
-        monthList[monthID - 1].amountIncome = "+$income"
-        monthList[monthID - 1].amountExpense = "-$expense"
+        monthList[monthID - 1].amountIncome = "$income"
+        monthList[monthID - 1].amountExpense = "$expense"
         monthList[monthID - 1].amountTotal = "${(income - expense)}"
         monthList[monthID - 1].year = mYear
     }
